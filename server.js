@@ -16,13 +16,13 @@ app.set("view engine", "mustache");
 app.set("views", path.join(__dirname, "/views"));
 
 // MIDDLEWARE
-app.use("/", express.static(path.join(__dirname, "/public")));
+app.use("/", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger("dev"));
 
 // ROUTES
 app.get("/", (req, res) => {
-  res.send("Up and serving...");
+  res.render("index");
 });
 
 app.listen(port, () => {

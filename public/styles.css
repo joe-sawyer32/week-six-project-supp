@@ -1,0 +1,92 @@
+body {
+  background-color: #60d9f1;
+}
+
+header {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+h1,
+h3,
+h4 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 3rem;
+  padding-top: .67rem;
+}
+
+#poweredBySoundCloudLogo {
+  margin-left: 1rem;
+}
+
+.player {
+  margin: 0 25%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.music-player {
+  width: 100%;
+}
+
+.now-playing {
+  width: 50%;
+  padding: 1rem 0;
+}
+
+#soundCloudLogo {
+  width: 50%;
+  text-align: right;
+  padding: 1rem 0;
+}
+
+.search {
+  margin: 1rem 20%;
+}
+
+.search-form {
+  display: flex;
+  box-sizing: border-box;
+}
+
+.userSearch {
+  flex: 9;
+  font-size: 1rem;
+  margin: 0 1rem;
+  padding: .5rem;
+}
+
+.searchButtonWrapper {
+  flex: 1;
+  margin: 0 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.searchButton {
+  align-self: stretch;
+  font-size: 1rem;
+  padding: 0 1rem;
+}
+
+.artist-options-block {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.artist-option {
+  width: 25%;
+  margin: 1rem 0;
+}
+
+@media screen and (min-width: 545px) {
+  .artist-option {
+    width: 20%;
+  }
+}
