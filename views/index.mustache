@@ -18,6 +18,35 @@
         <img src="https://developers.soundcloud.com/assets/powered_by_large_black-64fec369eec44b7ee75119f288c6d010.png" alt="Powered By SoundCloud Logo">
       </div>
     </header>
+    {{^user}}
+      <section class="login">
+        {{^newUser}}
+          <h4 class="login-reminder">Log In To Save Your Favorites - </h4>
+          <form action="/login" method="post">
+            <input type="text" name="username" placeholder="username" id="username">
+            <button type="submit">Login</button>
+          </form>
+        {{/newUser}}
+        {{#newUser}}
+          <h4 class="newUserMsg">{{user}}: {{msg}}</h4>
+          <form class="addUserForm" action="/users" method="post">
+            <button class="addUserButton" type="submit" name="adduser" value="{{user}}">Yes</button>
+            <button class="addUserButton" type="submit" name="adduser" value="">No</button>
+          </form>
+        {{/newUser}}
+      </section>
+    {{/user}}
+    {{#user}}
+      <section class="user-favorites">
+        <h3 class="user-name">{{user}}</h3>
+        <form action="/favorites" method="get">
+            <button type="submit">View My Favorites</button>
+        </form>
+        <form action="/favorites" method="post">
+            <button class="add-favorite" name="trackId" value="" type="submit">Add Current Track To My Favorites</button>
+        </form>
+      </section>
+    {{/user}}
     <section class="player">
       <audio class="music-player" controls="controls" src=""></audio>
       <div class="now-playing"></div>

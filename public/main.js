@@ -21,6 +21,11 @@ function updateNowPlaying(trackId) {
   var user = trackOption.querySelector(".user");
   nowPlaying.innerHTML =
     "Now Playing - " + track.innerHTML + " by " + user.innerHTML;
+
+  var addFavButton = document.querySelector(".add-favorite");
+  if (addFavButton) {
+    addFavButton.value = trackId;
+  }
 }
 
 function playTrack(trackId) {
