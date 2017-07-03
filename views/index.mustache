@@ -38,13 +38,14 @@
     {{/user}}
     {{#user}}
       <section class="user-favorites">
-        <h3 class="user-name">{{user}}</h3>
+        <h3 class="user-name">{{name}}</h3>
         <form action="/favorites" method="get">
             <button type="submit">View My Favorites</button>
         </form>
         <form action="/favorites" method="post">
-            <button class="add-favorite" name="trackId" value="" type="submit">Add Current Track To My Favorites</button>
+            <button class="add-favorite" name="id" value="" type="submit">Add Current Track To My Favorites</button>
         </form>
+        {{#oldFav}} <h4 class="oldFavMsg">{{msg}} {{/oldFav}}
       </section>
     {{/user}}
     <section class="player">

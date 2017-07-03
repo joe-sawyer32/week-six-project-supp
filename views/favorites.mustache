@@ -9,7 +9,17 @@
 </head>
 
 <body>
-
+  {{#user}}
+    <h1>{{name}}'s Favorite Tracks</h1>
+    {{#favs}}
+      {{#trackId}}
+        {{.}}
+      {{/trackId}}
+    {{/favs}}
+    {{^favs}}
+      <h3 class="no-favs">{{msg}}</h4>
+    {{/favs}}
+  {{/user}}
 </body>
 
 </html>

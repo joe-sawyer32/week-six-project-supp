@@ -22,15 +22,15 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(sessionConfig));
 app.use(logger("dev"));
-function createUserSess(userName) {
-  console.log("Made it to create user session for: ", userName);
-  req.session.user = userName;
-}
 
 // ROUTES
 app.get("/", (req, res) => {
   console.log(req.session);
-  res.render("index", { newUser: req.session.error, user: req.session.user });
+  res.render("index", {
+    newUser: req.session.loginErr,
+    user: req.session.user,
+    oldFav: req.session.addFavErr
+  });
 });
 
 app.post("/login", (req, res) => {
@@ -42,9 +42,9 @@ app.post("/login", (req, res) => {
     .then(foundUser => {
       if (foundUser) {
         console.log(foundUser);
-        req.session.user = foundUser.userName; // what to do with the found user as a promise ???
+        req.session.user = { id: foundUser.id, name: foundUser.userName };
       } else {
-        req.session.error = {
+        req.session.loginErr = {
           msg: "Invalid username. Would you like to create this username?",
           user: requestingUserName
         };
@@ -62,23 +62,70 @@ app.post("/users", (req, res) => {
     console.log("new user: ", newUser);
     newUser.save().then(addedUser => {
       if (addedUser) {
-        req.session.user = addedUser;
+        req.session.user = { id: addedUser.id, name: addedUser };
       } else {
-        res.status(500).send(error);
+        res.status(500).send("Unable to add user");
       }
     });
   } else {
     console.log("Returning To Login");
   }
-  delete req.session.error;
+  delete req.session.loginErr;
   res.redirect("/");
 });
 
 app.get("/favorites", (req, res) => {
-  res.render("favorites");
+  models.favorites
+    .findAll({ where: { userId: req.session.user.id } })
+    .then(foundFavs => {
+      if (foundFavs) {
+        console.log(foundFavs);
+        res.render("favorites", { user: req.session.user, favs: foundFavs });
+      } else {
+        res.render("favorites", {
+          user: req.session.user,
+          msg: "Unable to find favorite tracks for this user"
+        });
+      }
+    });
 });
 
-app.post("/favorites", (req, res) => {});
+app.post("/favorites", (req, res) => {
+  var user = req.session.user;
+  var addTrack = req.body;
+  console.log("new track obj: ", addTrack);
+  console.log("new track obj type: ", typeof addTrack);
+  console.log("user id: ", user.id);
+  if (addTrack) {
+    // need validation for integer
+    models.favorites
+      .findOne({ where: { trackId: addTrack.id, userId: user.id } })
+      .then(foundUser => {
+        if (foundUser) {
+          console.log(foundUser);
+          req.session.addFavErr = {
+            msg: "This track has already been added to your favorites"
+          };
+          res.redirect("/");
+        } else {
+          console.log("About to add");
+          var newFav = models.favorites.build({
+            trackId: addTrack.id,
+            userId: user.id
+          });
+          console.log("new fav: ", newFav);
+          newFav.save().then(addedFav => {
+            if (addedFav) {
+              delete req.session.addFavErr;
+              res.redirect("/");
+            } else {
+              res.status(500).send("Unable to add favorite");
+            }
+          });
+        }
+      });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Spinning with express: Port ${port}`);
